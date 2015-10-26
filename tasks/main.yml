@@ -1,0 +1,67 @@
+---
+
+- name: Create consul directories
+  file: dest={{ item }} state=directory
+  with_items: 
+    - "{{ consul_conf_dir }}"
+    - "{{ consul_work_dir }}"
+    - "{{ consul_log_dir }}"
+    - "{{ consul_script_dir }}"
+
+- name: Install consul
+  copy: src=consul dest=/usr/local/bin/consul mode=0755
+
+- name: Install consul-template
+  copy: src=consul-template dest=/usr/local/bin/consul-template mode=0755
+
+- name: Install consul web ui
+  copy: src=ui dest={{ consul_work_dir }}/ mode=0744
+
+- name: Install consul scripts
+  copy: src={{ item }} dest={{ consul_script_dir }}/{{ item }} mode=0755
+  with_items: consul_scripts
+
+- name: Install jq
+  apt: name=jq state=present
+
+#- name: Create watchers service definition
+#  copy: src=watchers.json dest={{ consul_conf_dir }}/watchers.json mode=0644
+
+- name: Create consul upstart script
+  template: src=consul.upstart.conf.j2 dest=/etc/init/consul.conf mode=0644
+
+#- name: Create redeploy_service script
+#  template: src=redeploy_service.sh.j2 dest={{ consul_script_dir }}/redeploy_service.sh mode=0755
+
+- name: Start consul
+  service: name=consul pattern=/usr/local/bin/consul state=started 
+
+- name: Add node to consul cluster
+  shell: consul join {{ consul_master_ip }}
+  when: consul_master_ip|default(false)
+
+- name: Create consul check definitions
+  template: src=consul_check.json.j2 dest={{ consul_conf_dir }}/consul_check.json
+  register: result
+
+- name: Restart consul
+  shell: killall -HUP consul
+  when: result|changed
+
+- name: Run registrator
+  docker:
+    name: registrator
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock
+    hostname: "{{ ansible_hostname }}"
+    image: gliderlabs/registrator
+    command: "-ip {{ consul_bind_ip }} consul://{{ consul_bind_ip }}:8500"
+
+- name: Registrator KV is running
+  docker:
+    name: registrator-kv
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock
+    hostname: "{{ ansible_hostname }}"
+    image: gliderlabs/registrator
+    command: "-ip {{ consul_bind_ip }} consulkv://{{ consul_bind_ip }}:8500/services"

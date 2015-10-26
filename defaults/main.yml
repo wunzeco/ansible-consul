@@ -1,0 +1,11 @@
+---
+consul_conf_dir:    /etc/consul.d
+consul_work_dir:    /opt/consul
+consul_log_dir:     "{{ consul_work_dir }}/logs"
+consul_script_dir:  "{{ consul_work_dir }}/scripts"
+consul_scripts: 
+  - mem.sh
+  - disk.sh
+consul_master_ip:
+consul_extra_opts:  ""         # e.g  "-server -bootstrap-expect 1 -ui-dir {{ consul_work_dir }}/ui"
+consul_bind_ip:     "{{ ansible_eth0.ipv4.address }}"  
