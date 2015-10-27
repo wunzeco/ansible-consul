@@ -7,9 +7,8 @@ galaxy_info:
   platforms:
    - name: Ubuntu
      versions:
-      - trusty
+       - trusty
   categories:
-   - consul
-   - cluster
+    - consul
+    - cluster
 dependencies: []
-  
