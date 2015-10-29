@@ -9,3 +9,7 @@ consul_scripts:
 consul_master_ip:
 consul_extra_opts:  ""         # e.g  "-server -bootstrap-expect 1 -ui-dir {{ consul_work_dir }}/ui"
 consul_bind_ip:     "{{ ansible_eth0.ipv4.address }}"  
+
+consul_pip_pkgs:
+  - python-consul
+  - requests

@@ -1,5 +1,12 @@
 ---
 
+- name: Install python-pip
+  apt: name=python-pip
+
+- name: Install required pip packages
+  pip: name={{ item }} state=present
+  with_items: consul_pip_pkgs
+
 - name: Create consul directories
   file: dest={{ item }} state=directory
   with_items: 
