@@ -3,7 +3,7 @@
     {
       "type": "checks",
       "state": "critical",
-      "handler": "/data/consul/scripts/redeploy_service.sh >>/data/consul/logs/watchers.log"
+      "handler": "{{ consul_script_dir }}/redeploy_service.sh >>{{ consul_log_dir }}/watchers.log"
     }
   ]
 }
