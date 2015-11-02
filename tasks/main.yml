@@ -32,7 +32,7 @@
   apt: name=jq state=present
 
 #- name: Create watchers service definition
-#  copy: src=watchers.json dest={{ consul_conf_dir }}/watchers.json mode=0644
+#  template: src=watchers.json.j2 dest={{ consul_conf_dir }}/watchers.json mode=0644
 
 - name: Create consul upstart script
   template: src=consul.upstart.conf.j2 dest=/etc/init/consul.conf mode=0644
