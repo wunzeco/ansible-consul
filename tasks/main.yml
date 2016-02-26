@@ -1,5 +1,11 @@
 ---
 
+- name: Create consul group
+  user: name={{ consul_group }} state=present
+
+- name: Create consul user
+  user: name={{ consul_user }} group={{ consul_group }} shell=/bin/bash home={{ consul_home }} createhome=no state=present
+
 - name: Install unzip
   apt: name=unzip state=present
 
@@ -14,27 +20,43 @@
   with_items: "{{ consul_pip_pkgs }}"
 
 - name: Create consul directories
-  file: dest={{ item }} state=directory
+  file: dest={{ item }} owner={{ consul_user }} group={{ consul_group }} mode=0755 recurse=yes state=directory
   with_items: 
-    - "{{ consul_work_dir }}"
-    - "{{ consul_conf_dir }}"
+    - "{{ consul_home }}"
     - "{{ consul_bin_dir }}"
     - "{{ consul_data_dir }}"
     - "{{ consul_logs_dir }}"
     - "{{ consul_scripts_dir }}"
 
+- name: Create consul config directories
+  file: dest={{ consul_conf_dir }}/{{ item }} owner=root group=root mode=0755 recurse=yes state=directory
+  with_items: 
+    - bootstrap
+    - server
+    - client
+
 - name: Get consul package checksum file
-  get_url: url={{ consul_checksum_file_url }} dest={{ consul_work_dir }}
+  get_url: url={{ consul_checksum_file_url }} dest={{ consul_home }}
 
 - name: Get checksum of consul package
-  shell: grep {{ consul_pkg }} {{ consul_work_dir }}/{{ consul_checksum_file }}
+  shell: grep {{ consul_pkg }} {{ consul_home }}/{{ consul_checksum_file }}
   register: chksum
 
 - name: Download consul package
-  get_url: url={{ consul_pkg_url }} dest={{ consul_work_dir }}/{{ consul_pkg }} checksum="sha256:{{ chksum.stdout.split(' ')|first }}"
+  get_url: url={{ consul_pkg_url }} dest={{ consul_home }}/{{ consul_pkg }} checksum="sha256:{{ chksum.stdout.split(' ')|first }}"
 
 - name: Install consul
-  unarchive: src={{ consul_work_dir }}/{{ consul_pkg }} dest={{ consul_bin_dir }} copy=no
+  unarchive: src={{ consul_home }}/{{ consul_pkg }} dest={{ consul_bin_dir }} copy=no
+
+- name: Create consul bootstrap config file
+  template: src=bootstrap_config.json.j2 dest={{ consul_conf_dir }}/bootstrap/config.json owner=root group=root mode=0644
+  when: "{{ consul_primary_node == inventory_hostname }}"   ## This can potentially be flakey. Rethink!
+  notify: Restart consul
+
+- name: Create consul server config file
+  template: src=server_config.json.j2 dest={{ consul_conf_dir }}/server/config.json owner=root group=root mode=0644
+  when: "{{ consul_node_type == 'server' }}"
+  notify: Restart consul
 
 - name: Install consul scripts
   copy: src={{ item }} dest={{ consul_scripts_dir }}/{{ item }} mode=0755
@@ -45,6 +67,7 @@
 
 - name: Create consul upstart script
   template: src=consul.upstart.conf.j2 dest=/etc/init/consul.conf mode=0644
+  notify: Restart consul
 
 #- name: Create redeploy_service script
 #  template: src=redeploy_service.sh.j2 dest={{ consul_scripts_dir }}/redeploy_service.sh mode=0755

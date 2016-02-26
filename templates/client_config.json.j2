@@ -1,0 +1,12 @@
+{
+    "server": 	     false,
+    "datacenter":    "{{ consul_datacenter }}",
+    "data_dir":      "{{ consul_data_dir }}",
+    "bind_addr":     "{{ ansible_default_ipv4.address }}",
+    "node_name":     "{{ ansible_hostname }}",
+    "ui_dir":        "{{ consul_web_ui_dir }}",
+    "encrypt":       "{{ consul_encrypt_key }}",
+    "log_level":     "{{ consul_log_level }}",
+    "enable_syslog": {{ consul_enable_syslog|string|lower }},
+    "start_join":    [ "{{ consul_nodes|join('", "') }}" ]
+}

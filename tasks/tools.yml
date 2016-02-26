@@ -1,6 +1,19 @@
-
+---
 ## - name: Install consul-template
 ##   copy: src=consul-template dest=/usr/local/bin/consul-template mode=0755
-## - name: Install consul web ui
-##   copy: src=ui dest={{ consul_work_dir }}/ mode=0744
 
+- name: Create consul web ui directory
+  file: path={{ consul_web_ui_dir }} owner={{ consul_user }} group={{ consul_group }} mode=0755 state=directory
+
+- name: Get consul web ui package checksum file
+  get_url: url={{ consul_checksum_file_url }} dest={{ consul_home }}
+
+- name: Get checksum of consul web ui package
+  shell: grep {{ consul_web_ui_pkg }} {{ consul_home }}/{{ consul_checksum_file }}
+  register: chksum
+
+- name: Download consul web ui package
+  get_url: url={{ consul_web_ui_pkg_url }} dest={{ consul_home }}/{{ consul_web_ui_pkg }} checksum="sha256:{{ chksum.stdout.split(' ')|first }}"
+
+- name: Install consul
+  unarchive: src={{ consul_home }}/{{ consul_web_ui_pkg }} dest={{ consul_web_ui_dir }} copy=no

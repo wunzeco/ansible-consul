@@ -14,24 +14,24 @@
 - name: Create consul directories
   file: dest={{ item }} state=directory
   with_items: 
-    - "{{ consul_work_dir }}"
+    - "{{ consul_home }}"
     - "{{ consul_conf_dir }}"
     - "{{ consul_bin_dir }}"
     - "{{ consul_log_dir }}"
     - "{{ consul_script_dir }}"
 
 - name: Get consul package checksum file
-  get_url: url={{ consul_checksum_file_url }} dest={{ consul_work_dir }}
+  get_url: url={{ consul_checksum_file_url }} dest={{ consul_home }}
 
 - name: Get checksum of consul package
-  shell: grep {{ consul_pkg }} {{ consul_work_dir }}/{{ consul_checksum_file }}
+  shell: grep {{ consul_pkg }} {{ consul_home }}/{{ consul_checksum_file }}
   register: chksum
 
 - name: Download consul package
-  get_url: url={{ consul_pkg_url }} dest={{ consul_work_dir }}/{{ consul_pkg }} checksum="sha256:{{ chksum.stdout.split(' ')|first }}"
+  get_url: url={{ consul_pkg_url }} dest={{ consul_home }}/{{ consul_pkg }} checksum="sha256:{{ chksum.stdout.split(' ')|first }}"
 
 - name: Install consul
-  unarchive: src={{ consul_work_dir }}/{{ consul_pkg }} dest={{ consul_bin_dir }} copy=no
+  unarchive: src={{ consul_home }}/{{ consul_pkg }} dest={{ consul_bin_dir }} copy=no
 
 ## - name: Install consul
 ##   copy: src=consul dest=/usr/local/bin/consul mode=0755
@@ -40,7 +40,7 @@
 ##   copy: src=consul-template dest=/usr/local/bin/consul-template mode=0755
 ## 
 ## - name: Install consul web ui
-##   copy: src=ui dest={{ consul_work_dir }}/ mode=0744
+##   copy: src=ui dest={{ consul_home }}/ mode=0744
 ## 
 - name: Install consul scripts
   copy: src={{ item }} dest={{ consul_script_dir }}/{{ item }} mode=0755

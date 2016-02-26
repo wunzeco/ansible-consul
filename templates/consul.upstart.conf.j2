@@ -1,9 +1,24 @@
-# Consul Agent (Upstart unit)
 description "Consul Agent"
-start on (local-filesystems and net-device-up IFACE!=lo)
-stop on runlevel [016]
 
-exec /usr/local/bin/consul agent {{ consul_extra_opts }} -data-dir {{ consul_data_dir }} -config-dir {{ consul_conf_dir }} -node={{ ansible_hostname }} -bind={{ consul_bind_ip }} -client=0.0.0.0 >{{ consul_logs_dir }}/consul.log 2>&1 &
+start on (local-filesystems and net-device-up IFACE!=lo)
+stop on runlevel [!12345]
+
+setuid consul
+setgid consul
+
+## Restart the process if it dies with a signal or exit code not given by the 
+## 'normal exit' stanza.
 respawn
-respawn limit 10 10
-kill timeout 10
+
+## Give up if restart occurs 10 times in 15 seconds.
+respawn limit 10 15
+
+{% set consul_conf_subdir = 'server' %}
+{% if consul_node_type == 'server' and consul_primary_node == inventory_hostname %}
+{% set consul_conf_subdir = 'bootstrap' %}
+{% endif %}
+exec {{ consul_bin_dir }}/consul agent -config-dir {{ consul_conf_dir }}/{{ consul_conf_subdir }} > {{ consul_logs_dir }}/consul.log 2>&1
+
+## exec /usr/local/bin/consul agent {{ consul_extra_opts }} -data-dir {{ consul_data_dir }} \
+##        -config-dir {{ consul_conf_dir }} -node={{ ansible_hostname }} -bind={{ consul_bind_ip }} \
+##        -client=0.0.0.0 >{{ consul_logs_dir }}/consul.log 2>&1 &

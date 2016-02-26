@@ -1,5 +1,17 @@
 ---
 - hosts: test-kitchen
 
+  vars:
+    consul_datacenter:  kitchenDC
+    consul_encrypt_key: '74d+D4bl59FeKo0r+U5lSA=='
+    consul_primary_node: localhost
+    consul_nodes:
+      - "{{ ansible_default_ipv4.address }}"
+      - "10.10.10.10"
+      - "10.10.10.20"
+
+  pre_tasks:
+    - debug: var=inventory_hostname
+
   roles:
     - ansible-consul
