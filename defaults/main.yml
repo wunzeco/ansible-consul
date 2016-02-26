@@ -1,8 +1,9 @@
 ---
-consul_conf_dir:    /etc/consul.d
-consul_work_dir:    /opt/consul
+consul_conf_dir:    "/etc/consul.d"
+consul_work_dir:    "/opt/consul"
+consul_bin_dir:     "/usr/local/bin"
 consul_log_dir:     "{{ consul_work_dir }}/logs"
-consul_script_dir:  "{{ consul_work_dir }}/scripts"
+consul_scripts_dir: "{{ consul_work_dir }}/scripts"
 consul_scripts: 
   - mem.sh
   - disk.sh
@@ -13,3 +14,9 @@ consul_bind_ip:     "{{ ansible_eth0.ipv4.address }}"
 consul_pip_pkgs:
   - python-consul
   - requests
+
+consul_version: 0.6.3
+consul_pkg:     "consul_{{ consul_version }}_linux_amd64.zip"
+consul_pkg_url: "https://releases.hashicorp.com/consul/{{ consul_version }}/{{ consul_pkg }}"
+consul_checksum_file:     "consul_{{ consul_version }}_SHA256SUMS"
+consul_checksum_file_url: "https://releases.hashicorp.com/consul/{{ consul_version }}/{{ consul_checksum_file }}"

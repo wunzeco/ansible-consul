@@ -1,0 +1,6 @@
+
+## - name: Install consul-template
+##   copy: src=consul-template dest=/usr/local/bin/consul-template mode=0755
+## - name: Install consul web ui
+##   copy: src=ui dest={{ consul_work_dir }}/ mode=0744
+
