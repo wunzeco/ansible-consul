@@ -2,7 +2,8 @@
 consul_conf_dir:    "/etc/consul.d"
 consul_work_dir:    "/opt/consul"
 consul_bin_dir:     "/usr/local/bin"
-consul_log_dir:     "{{ consul_work_dir }}/logs"
+consul_data_dir:    "{{ consul_work_dir }}/data"
+consul_logs_dir:    "{{ consul_work_dir }}/logs"
 consul_scripts_dir: "{{ consul_work_dir }}/scripts"
 consul_scripts: 
   - mem.sh

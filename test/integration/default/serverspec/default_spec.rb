@@ -14,6 +14,7 @@ end
 %W( 
   #{consul_bin_dir}
   #{consul_conf_dir}
+  #{consul_work_dir}/data
   #{consul_work_dir}/logs
   #{consul_work_dir}/scripts
 ).each do |dir|

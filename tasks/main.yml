@@ -19,7 +19,8 @@
     - "{{ consul_work_dir }}"
     - "{{ consul_conf_dir }}"
     - "{{ consul_bin_dir }}"
-    - "{{ consul_log_dir }}"
+    - "{{ consul_data_dir }}"
+    - "{{ consul_logs_dir }}"
     - "{{ consul_scripts_dir }}"
 
 - name: Get consul package checksum file
