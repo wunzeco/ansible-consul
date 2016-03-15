@@ -10,7 +10,7 @@ Ansible role to install and configure Consul
 
 ```
   roles:
-    - ogonna.iwunze.consul
+    - wunzeco.consul
 ```
 
 
