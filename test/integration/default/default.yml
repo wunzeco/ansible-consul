@@ -9,6 +9,7 @@
       - "{{ ansible_default_ipv4.address }}"
       - "10.10.10.10"
       - "10.10.10.20"
+    consul_install_web_ui: true
 
   pre_tasks:
     - debug: var=inventory_hostname

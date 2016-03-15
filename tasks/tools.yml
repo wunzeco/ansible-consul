@@ -1,6 +1,4 @@
 ---
-## - name: Install consul-template
-##   copy: src=consul-template dest=/usr/local/bin/consul-template mode=0755
 
 - name: Create consul web ui directory
   file: path={{ consul_web_ui_dir }} owner={{ consul_user }} group={{ consul_group }} mode=0755 state=directory
@@ -15,5 +13,5 @@
 - name: Download consul web ui package
   get_url: url={{ consul_web_ui_pkg_url }} dest={{ consul_home }}/{{ consul_web_ui_pkg }} checksum="sha256:{{ chksum.stdout.split(' ')|first }}"
 
-- name: Install consul
+- name: Install consul web ui
   unarchive: src={{ consul_home }}/{{ consul_web_ui_pkg }} dest={{ consul_web_ui_dir }} copy=no

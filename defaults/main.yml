@@ -34,3 +34,4 @@ consul_checksum_file:     "consul_{{ consul_version }}_SHA256SUMS"
 consul_checksum_file_url: "https://releases.hashicorp.com/consul/{{ consul_version }}/{{ consul_checksum_file }}"
 consul_web_ui_pkg:        "consul_{{ consul_version }}_web_ui.zip"
 consul_web_ui_pkg_url:    "https://releases.hashicorp.com/consul/{{ consul_version }}/{{ consul_web_ui_pkg }}"
+consul_install_web_ui: false

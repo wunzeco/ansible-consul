@@ -74,3 +74,6 @@
 
 - name: Start consul
   service: name=consul pattern={{ consul_bin_dir }}/consul enabled=yes state=started 
+
+- name: web_ui.yml
+  when: consul_install_web_ui
