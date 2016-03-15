@@ -28,6 +28,9 @@
     - "{{ consul_logs_dir }}"
     - "{{ consul_scripts_dir }}"
 
+- name: Create consul bin dir
+  file: dest={{ consul_bin_dir }} owner=root group=root mode=0755 recurse=yes state=directory
+
 - name: Create consul config directories
   file: dest={{ consul_conf_dir }}/{{ item }} owner=root group=root mode=0755 recurse=yes state=directory
   with_items: 

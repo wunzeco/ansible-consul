@@ -23,7 +23,6 @@ end
 end
 
 %W( 
-  #{consul_bin_dir}
   #{consul_home}/data
   #{consul_home}/logs
   #{consul_home}/scripts
@@ -37,6 +36,7 @@ end
 end
 
 %W( 
+  #{consul_bin_dir}
   #{consul_conf_dir}
   #{consul_conf_dir}/bootstrap
   #{consul_conf_dir}/server
