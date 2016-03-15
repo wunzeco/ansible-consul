@@ -59,7 +59,7 @@
   notify: Restart consul
 
 - name: Install consul scripts
-  copy: src={{ item }} dest={{ consul_scripts_dir }}/{{ item }} mode=0755
+  copy: src={{ item }} dest={{ consul_scripts_dir }}/{{ item }} owner={{ consul_user }} group={{ consul_group }} mode=0755
   with_items: "{{ consul_scripts }}"
 
 #- name: Create watchers service definition
@@ -75,5 +75,5 @@
 - name: Start consul
   service: name=consul pattern={{ consul_bin_dir }}/consul enabled=yes state=started 
 
-- name: web_ui.yml
-  when: consul_install_web_ui
+- include: web_ui.yml
+  when: "{{ consul_install_web_ui or consul_node_type == 'client' }}"

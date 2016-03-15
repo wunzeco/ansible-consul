@@ -14,4 +14,4 @@
   get_url: url={{ consul_web_ui_pkg_url }} dest={{ consul_home }}/{{ consul_web_ui_pkg }} checksum="sha256:{{ chksum.stdout.split(' ')|first }}"
 
 - name: Install consul web ui
-  unarchive: src={{ consul_home }}/{{ consul_web_ui_pkg }} dest={{ consul_web_ui_dir }} copy=no
+  unarchive: src={{ consul_home }}/{{ consul_web_ui_pkg }} dest={{ consul_web_ui_dir }} owner={{ consul_user }} group={{ consul_group }} copy=no

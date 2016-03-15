@@ -27,6 +27,7 @@ end
   #{consul_home}/data
   #{consul_home}/logs
   #{consul_home}/scripts
+  #{consul_home}/ui
 ).each do |dir|
   describe file(dir) do
     it { should be_directory }
@@ -84,4 +85,10 @@ end
 describe process('consul') do
   it { should be_running }
   its(:args) { should match %r(consul agent -config-dir .*) }
+end
+
+describe file("#{consul_home}/ui/index.html") do
+  it { should be_file }
+  it { should be_mode 644 }
+  it { should be_owned_by consul_user }
 end
