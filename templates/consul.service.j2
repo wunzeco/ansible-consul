@@ -13,7 +13,7 @@ Restart=on-failure
 {% endif %}
 ExecStart={{ consul_bin_dir }}/consul agent -config-dir {{ consul_conf_dir }}/{{ consul_conf_subdir }} > {{ consul_logs_dir }}/consul.log 2>&1
 ExecReload=/bin/kill -HUP $MAINPID
-KillSignal=SIGTERM
+KillSignal=SIGINT
 
 [Install]
 WantedBy=multi-user.target
