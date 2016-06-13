@@ -24,3 +24,17 @@ Ansible role to install and configure Consul
   roles:
     - wunzeco.consul
 ```
+
+
+## Testing
+
+To run this role's integration tests
+
+```
+kitchen test
+```
+
+
+## Dependencies
+
+none

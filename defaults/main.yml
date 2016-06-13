@@ -27,6 +27,8 @@ consul_pip_pkgs:
   - python-consul
   - requests
 
+consul_prereq_pkgs: [ jq, unzip, python-pip ]
+
 consul_version: 0.6.3
 consul_pkg:     "consul_{{ consul_version }}_linux_amd64.zip"
 consul_pkg_url: "https://releases.hashicorp.com/consul/{{ consul_version }}/{{ consul_pkg }}"
