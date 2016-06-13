@@ -72,9 +72,18 @@ consul_scripts.each do |f|
   end
 end
 
-describe file('/etc/init/consul.conf') do
-  it { should be_file }
-  it { should be_mode 644 }
+if os[:family] =~ /ubuntu|debian/
+  describe file('/etc/init/consul.conf') do
+    it { should be_file }
+    it { should be_mode 644 }
+  end
+end
+
+if os[:family] =~ /centos|redhat/
+  describe file('/usr/lib/systemd/system/consul.service') do
+    it { should be_file }
+    it { should be_mode 644 }
+  end
 end
 
 describe service('consul') do
