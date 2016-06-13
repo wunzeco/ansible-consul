@@ -14,4 +14,15 @@ platforms:
   - name: centos-7.2
 
 suites:
-  - name: default
+  - name: server01
+    driver:
+      network:
+        - ["private_network", { ip: "172.29.129.181" }]
+  - name: server02
+    driver:
+      network:
+        - ["private_network", { ip: "172.29.129.182" }]
+  - name: client
+    driver:
+      network:
+        - ["private_network", { ip: "172.29.129.183" }]

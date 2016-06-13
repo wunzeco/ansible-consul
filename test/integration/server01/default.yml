@@ -1,0 +1,32 @@
+---
+- name: Consul Server01
+  hosts: test-kitchen
+
+  vars:
+    consul_datacenter:  kitchenDC
+    consul_encrypt_key: '74d+D4bl59FeKo0r+U5lSA=='
+    consul_primary_node: localhost
+    consul_nodes:
+      - "{{ ansible_eth1.ipv4.address }}"
+      - "172.29.129.182"
+    consul_install_web_ui: true
+    consul_bind_ip: "{{ ansible_eth1.ipv4.address }}"
+
+  pre_tasks:
+    - debug: var=inventory_hostname
+
+  roles:
+    - ansible-consul
+
+  post_tasks:
+    - name: Install curl | Debian
+      apt: name=curl state=present
+      when: ansible_os_family|lower == 'debian'
+
+    - name: Install curl | RedHat
+      apt: name=curl state=present
+      when: ansible_os_family|lower == 'debian'
+
+    - name: Create a test key/value data in consul (from server)
+      shell: >
+          curl -X PUT -d 'from-server01' http://localhost:8500/v1/kv/web/key1

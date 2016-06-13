@@ -89,7 +89,7 @@
     owner: root
     group: root
     mode:  0644
-  when: "{{ consul_primary_node == inventory_hostname }}"   ## This can potentially be flakey. Rethink!
+  when: "{{ consul_node_type == 'server' and consul_primary_node == inventory_hostname }}" ## This can potentially be flakey. Rethink!
   notify: Restart consul
 
 - name: Create consul server config file
@@ -100,6 +100,16 @@
     group: root
     mode:  0644
   when: "{{ consul_node_type == 'server' }}"
+  notify: Restart consul
+
+- name: Create consul client config file
+  template: 
+    src:   client_config.json.j2
+    dest:  "{{ consul_conf_dir }}/client/config.json"
+    owner: root
+    group: root
+    mode:  0644
+  when: "{{ consul_node_type == 'client' }}"
   notify: Restart consul
 
 - name: Install consul scripts
