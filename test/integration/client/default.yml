@@ -15,6 +15,8 @@
 
   pre_tasks:
     - debug: var=inventory_hostname
+    - set_fact: consul_bind_ip="{{ ansible_enp0s8.ipv4.address }}"
+      when: ansible_distribution|lower == 'centos' 
 
   roles:
     - ansible-consul

@@ -7,12 +7,14 @@
     consul_encrypt_key: '74d+D4bl59FeKo0r+U5lSA=='
     consul_primary_node: server01  ## any value will do here to stop server01 bootstraping
     consul_nodes:
-      - "{{ ansible_eth1.ipv4.address }}"
       - "172.29.129.181"
+      - "172.29.129.182"
     consul_bind_ip: "{{ ansible_eth1.ipv4.address }}"
 
   pre_tasks:
     - debug: var=inventory_hostname
+    - set_fact: consul_bind_ip="{{ ansible_enp0s8.ipv4.address }}"
+      when: ansible_distribution|lower == 'centos' 
 
   roles:
     - ansible-consul
