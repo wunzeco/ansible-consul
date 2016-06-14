@@ -64,6 +64,11 @@ describe file("#{consul_bin_dir}/consul") do
   it { should be_mode 755 }
 end
 
+describe command("#{consul_bin_dir}/consul --version") do
+  its(:exit_status) { should eq 0 }
+  its(:stdout) { should match %r(Consul v0.6.4) }
+end
+
 consul_scripts.each do |f|
   describe file("#{consul_home}/scripts/#{f}") do
     it { should be_file }

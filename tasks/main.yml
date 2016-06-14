@@ -75,12 +75,20 @@
     url:      "{{ consul_pkg_url }}"
     dest:     "{{ consul_home }}/{{ consul_pkg }}"
     checksum: "sha256:{{ chksum.stdout.split(' ')|first }}"
+  register: pkg
 
+- name: Check consul binary exists
+  stat: 
+    path: "{{ consul_bin_dir }}/consul"
+  register: bin
+  
 - name: Install consul
   unarchive:
     src:  "{{ consul_home }}/{{ consul_pkg }}"
     dest: "{{ consul_bin_dir }}"
     copy: no
+  when: pkg|changed or not bin.stat.exists
+  notify: Restart consul
 
 - name: Create consul bootstrap config file
   template:
