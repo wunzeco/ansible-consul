@@ -31,5 +31,11 @@
       when: ansible_os_family|lower == 'debian'
 
     - name: Create a test key/value data in consul (from client)
-      shell: >
-          curl -X PUT -d 'from-client' http://localhost:8500/v1/kv/web/key2
+      uri:
+        url: http://localhost:8500/v1/kv/web/key2
+        method: PUT
+        body: "from-client"
+      register: resp
+      until: resp.status == 200
+      retries: 3
+      delay: 10
