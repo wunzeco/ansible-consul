@@ -32,9 +32,7 @@ To run this role's integration tests
 
 ```
 PLATFORM=ubuntu				# OR centos
-kitchen converge $PLATFORM && \
-	kitchen verify $PLATFORM && \
-	kitchen destroy $PLATFORM 
+kitchen verify $PLATFORM && kitchen destroy $PLATFORM 
 ```
 
 
