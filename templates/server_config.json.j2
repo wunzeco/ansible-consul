@@ -1,15 +1,16 @@
 {# Exclude own ip from list of consul_nodes #}
 {% set consul_member_ips = consul_nodes|difference([ansible_default_ipv4.address]) %}
 {
-    "bootstrap":     false,
-    "server": 	     true,
-    "datacenter":    "{{ consul_datacenter }}",
-    "data_dir":      "{{ consul_data_dir }}",
-    "bind_addr":     "{{ consul_bind_ip }}",
-    "client_addr":   "0.0.0.0",
-    "node_name":     "{{ ansible_hostname }}",
-    "encrypt":       "{{ consul_encrypt_key }}",
-    "log_level":     "{{ consul_log_level }}",
-    "enable_syslog": {{ consul_enable_syslog|string|lower }},
-    "start_join":    [ "{{ consul_member_ips|join('", "') }}" ]
+    "bootstrap":           false,
+    "server": 	           true,
+    "datacenter":          "{{ consul_datacenter }}",
+    "data_dir":            "{{ consul_data_dir }}",
+    "bind_addr":           "{{ consul_bind_ip }}",
+    "client_addr":         "0.0.0.0",
+    "node_name":           "{{ ansible_hostname }}",
+    "encrypt":             "{{ consul_encrypt_key }}",
+    "log_level":           "{{ consul_log_level }}",
+    "enable_syslog":       {{ consul_enable_syslog|default(false)|bool|lower }},
+    "leave_on_terminate":  {{ consul_leave_on_terminate|default(false)|bool|lower }},
+    "start_join":          [ "{{ consul_member_ips|join('", "') }}" ]
 }
