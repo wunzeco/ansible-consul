@@ -22,7 +22,11 @@ suites:
     driver:
       network:
         - ["private_network", { ip: "172.29.129.182" }]
-  - name: client
+  - name: server03
     driver:
       network:
         - ["private_network", { ip: "172.29.129.183" }]
+  - name: client
+    driver:
+      network:
+        - ["private_network", { ip: "172.29.129.184" }]

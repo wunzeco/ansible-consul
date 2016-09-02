@@ -8,9 +8,7 @@ EnvironmentFile=-/etc/sysconfig/consul
 Environment=GOMAXPROCS=2
 Restart=on-failure
 {% set consul_conf_subdir = 'server' %}
-{% if consul_node_type == 'server' and consul_primary_node == inventory_hostname %}
-{% set consul_conf_subdir = 'bootstrap' %}
-{% elif consul_node_type == 'client' %}
+{% if consul_node_type == 'client' %}
 {% set consul_conf_subdir = 'client' %}
 {% endif %}
 ExecStart={{ consul_bin_dir }}/consul agent -config-dir {{ consul_conf_dir }}/{{ consul_conf_subdir }} > {{ consul_logs_dir }}/consul.log 2>&1
