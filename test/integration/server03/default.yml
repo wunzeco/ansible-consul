@@ -18,3 +18,14 @@
 
   roles:
     - ansible-consul
+
+  post_tasks:
+    - name: Create a test key/value data in consul (from server)
+      uri:
+        url: http://localhost:8500/v1/kv/web/key1
+        method: PUT
+        body: "from-server03"
+      register: resp
+      until: resp.status == 200
+      retries: 3
+      delay: 10

@@ -38,7 +38,6 @@ end
 %W( 
   #{consul_bin_dir}
   #{consul_conf_dir}
-  #{consul_conf_dir}/bootstrap
   #{consul_conf_dir}/server
   #{consul_conf_dir}/client
 ).each do |dir|
@@ -47,11 +46,6 @@ end
     it { should be_mode 755 }
     it { should be_owned_by 'root' }
   end
-end
-
-describe file("#{consul_conf_dir}/bootstrap/config.json") do
-  it { should be_file }
-  it { should be_mode 644 }
 end
 
 describe file("#{consul_conf_dir}/server/config.json") do

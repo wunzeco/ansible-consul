@@ -38,7 +38,6 @@ end
 %W( 
   #{consul_bin_dir}
   #{consul_conf_dir}
-  #{consul_conf_dir}/bootstrap
   #{consul_conf_dir}/server
   #{consul_conf_dir}/client
 ).each do |dir|
