@@ -26,5 +26,5 @@
       when: ansible_os_family|lower == 'debian'
 
     - name: Install curl | RedHat
-      apt: name=curl state=present
-      when: ansible_os_family|lower == 'debian'
+      yum: name=curl state=present
+      when: ansible_os_family|lower == 'redhat'

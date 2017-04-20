@@ -1,5 +1,5 @@
 ---
-- name: Consul Server02
+- name: Consul Server03
   hosts: test-kitchen
 
   vars:
