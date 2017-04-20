@@ -60,7 +60,7 @@ end
 
 describe command("#{consul_bin_dir}/consul --version") do
   its(:exit_status) { should eq 0 }
-  its(:stdout) { should match %r(Consul v0.6.4) }
+  its(:stdout) { should match %r(Consul v0.7.5) }
 end
 
 consul_scripts.each do |f|

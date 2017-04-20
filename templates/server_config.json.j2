@@ -10,5 +10,8 @@
     "log_level":           "{{ consul_log_level }}",
     "enable_syslog":       {{ consul_enable_syslog|default(false)|bool|lower }},
     "leave_on_terminate":  {{ consul_leave_on_terminate|default(false)|bool|lower }},
+{% if consul_version|version_compare('0.7.0', '>=') %}
+    "performance":         { "raft_multiplier": {{ consul_performance_raft_multiplier }} },
+{% endif %}
     "start_join":          [ "{{ consul_nodes|join('", "') }}" ]
 }

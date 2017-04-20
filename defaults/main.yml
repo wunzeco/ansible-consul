@@ -22,6 +22,7 @@ consul_extra_opts:   ""         # e.g  "-server -bootstrap-expect 1 -ui-dir {{ c
 consul_bind_ip:      "{{ ansible_default_ipv4.address }}"  
 consul_leave_on_terminate: true
 consul_bootstrap_expect: "{{ consul_nodes|length }}"
+consul_performance_raft_multiplier: 1
 
 consul_node_type: server
 consul_pip_pkgs:
@@ -30,7 +31,7 @@ consul_pip_pkgs:
 
 consul_prereq_pkgs: [ jq, unzip, python-pip ]
 
-consul_version: 0.6.4
+consul_version: 0.7.5
 consul_pkg:     "consul_{{ consul_version }}_linux_amd64.zip"
 consul_pkg_url: "https://releases.hashicorp.com/consul/{{ consul_version }}/{{ consul_pkg }}"
 consul_checksum_file:     "consul_{{ consul_version }}_SHA256SUMS"
