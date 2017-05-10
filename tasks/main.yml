@@ -96,7 +96,7 @@
     owner: root
     group: root
     mode:  0644
-  when: "{{ consul_node_type == 'server' }}"
+  when: consul_node_type == 'server'
   notify: Restart consul
 
 - name: Create consul client config file
@@ -106,7 +106,7 @@
     owner: root
     group: root
     mode:  0644
-  when: "{{ consul_node_type == 'client' }}"
+  when: consul_node_type == 'client'
   notify: Restart consul
 
 - name: Install consul scripts
@@ -144,4 +144,4 @@
   service: name=consul pattern={{ consul_bin_dir }}/consul enabled=yes state=started 
 
 - include: web_ui.yml
-  when: "{{ consul_install_web_ui or consul_node_type == 'client' }}"
+  when: consul_install_web_ui or consul_node_type == 'client'

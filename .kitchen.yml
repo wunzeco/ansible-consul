@@ -7,7 +7,7 @@ provisioner:
   hosts: test-kitchen
   require_pip: true
   require_ansible_repo: false
-  ansible_version:  2.2.1.0
+  ansible_version:  2.3.0.0
   ansible_verbose:  false
   ansible_verbosity: 2
   ansible_diff: true
