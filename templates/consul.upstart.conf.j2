@@ -13,6 +13,10 @@ respawn
 ## Give up if restart occurs 10 times in 15 seconds.
 respawn limit 10 15
 
+## Potential workaround for:
+##     [ERR] memberlist: Error accepting TCP connection: accept tcp 10.59.11.96:8301: accept4: too many open files
+limit nofile 40960 40960
+
 {% set consul_conf_subdir = 'server' %}
 {% if consul_node_type == 'client' %}
 {% set consul_conf_subdir = 'client' %}
