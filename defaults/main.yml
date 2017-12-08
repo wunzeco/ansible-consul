@@ -3,6 +3,8 @@ consul_user:  consul
 consul_group: "{{ consul_user }}"
 consul_home:  "/opt/consul"
 
+consul_enable_script_checks: false
+
 consul_conf_dir:    "/etc/consul.d"
 consul_bin_dir:     "/usr/local/bin"
 consul_data_dir:    "{{ consul_home }}/data"
