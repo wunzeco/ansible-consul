@@ -11,8 +11,7 @@
     "log_level":           "{{ consul_log_level }}",
     "enable_syslog":       {{ consul_enable_syslog|default(false)|bool|lower }},
 {% if consul_version.startswith('0.9') %}
-    "enable_script_checks": {{ consul_enable_script_checks|default(false)|bool|lower }}
-
+    "enable_script_checks": {{ consul_enable_script_checks|default(false)|bool|lower }},
 {%  endif %}
     "leave_on_terminate":  {{ consul_leave_on_terminate|default(false)|bool|lower }},
     "start_join":          [ "{{ consul_nodes|join('", "') }}" ]
