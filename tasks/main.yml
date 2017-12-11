@@ -144,4 +144,4 @@
   service: name=consul pattern={{ consul_bin_dir }}/consul enabled=yes state=started 
 
 - include: web_ui.yml
-  when: (consul_install_web_ui or consul_node_type == 'client') and not consul_version.startswith('0.9')
+  when: (consul_install_web_ui or consul_node_type == 'client') and not consul_version|version_compare('0.9.0', '>=')
