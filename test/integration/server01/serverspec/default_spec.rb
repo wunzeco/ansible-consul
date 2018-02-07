@@ -26,7 +26,6 @@ end
   #{consul_home}/data
   #{consul_home}/logs
   #{consul_home}/scripts
-  #{consul_home}/ui
 ).each do |dir|
   describe file(dir) do
     it { should be_directory }
@@ -60,7 +59,7 @@ end
 
 describe command("#{consul_bin_dir}/consul --version") do
   its(:exit_status) { should eq 0 }
-  its(:stdout) { should match %r(Consul v0.7.5) }
+  its(:stdout) { should match %r(Consul v1.0.1) }
 end
 
 consul_scripts.each do |f|
@@ -95,8 +94,3 @@ describe process('consul') do
   its(:args) { should match %r(consul agent -config-dir .*) }
 end
 
-describe file("#{consul_home}/ui/index.html") do
-  it { should be_file }
-  it { should be_mode 644 }
-  it { should be_owned_by consul_user }
-end
