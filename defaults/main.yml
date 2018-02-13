@@ -33,7 +33,7 @@ consul_pip_pkgs:
 
 consul_prereq_pkgs: [ jq, unzip, python-pip ]
 
-consul_version: 0.7.5
+consul_version: 1.0.1
 consul_pkg:     "consul_{{ consul_version }}_linux_amd64.zip"
 consul_pkg_url: "https://releases.hashicorp.com/consul/{{ consul_version }}/{{ consul_pkg }}"
 consul_checksum_file:     "consul_{{ consul_version }}_SHA256SUMS"

@@ -24,10 +24,10 @@ end
 
 describe command("#{consul_bin_dir}/consul --version") do
   its(:exit_status) { should eq 0 }
-  its(:stdout) { should match %r(Consul v0.7.5) }
+  its(:stdout) { should match %r(Consul v1.0.1) }
 end
 
-describe command("#{consul_bin_dir}/consul operator raft -list-peers| grep -c ':8300'") do
+describe command("#{consul_bin_dir}/consul operator raft list-peers| grep -c ':8300'") do
   its(:exit_status) { should eq 0 }
   its(:stdout) { should match '3' }
 end
