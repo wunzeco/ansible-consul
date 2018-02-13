@@ -9,13 +9,12 @@
       - "172.29.129.181"
       - "172.29.129.182"
       - "172.29.129.183"
-    consul_install_web_ui: true
     consul_bind_ip: "{{ ansible_eth1.ipv4.address }}"
 
   pre_tasks:
     - debug: var=inventory_hostname
     - set_fact: consul_bind_ip="{{ ansible_enp0s8.ipv4.address }}"
-      when: ansible_distribution|lower == 'centos' 
+      when: ansible_service_mgr == 'systemd'
 
   roles:
     - ansible-consul
