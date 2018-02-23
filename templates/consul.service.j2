@@ -4,14 +4,12 @@ Requires=network-online.target
 After=network-online.target
 
 [Service]
-EnvironmentFile=-/etc/sysconfig/consul
-Environment=GOMAXPROCS=2
 Restart=on-failure
 {% set consul_conf_subdir = 'server' %}
 {% if consul_node_type == 'client' %}
 {% set consul_conf_subdir = 'client' %}
 {% endif %}
-ExecStart={{ consul_bin_dir }}/consul agent -config-dir {{ consul_conf_dir }}/{{ consul_conf_subdir }} > {{ consul_logs_dir }}/consul.log 2>&1
+ExecStart=/bin/bash -ce "exec {{ consul_bin_dir }}/consul agent -config-dir {{ consul_conf_dir }}/{{ consul_conf_subdir }} > {{ consul_logs_dir }}/consul.log 2>&1"
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGINT
 

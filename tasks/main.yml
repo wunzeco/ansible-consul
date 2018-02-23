@@ -64,12 +64,13 @@
 - name: Get consul package checksum file
   get_url:
     url:  "{{ consul_checksum_file_url }}"
-    dest: "{{ consul_home }}"
+    dest: "{{ consul_home }}/{{ consul_checksum_file }}"
 
 - name: Get checksum of consul package
   shell: >
       grep {{ consul_pkg }} {{ consul_home }}/{{ consul_checksum_file }}
   register: chksum
+  changed_when: false
 
 - name: Download consul package
   get_url:

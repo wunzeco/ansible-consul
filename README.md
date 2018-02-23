@@ -31,8 +31,8 @@ Ansible role to install and configure Consul
 To run this role's integration tests
 
 ```
-PLATFORM=ubuntu				# OR centos
-kitchen verify $PLATFORM && kitchen destroy $PLATFORM 
+PLATFORM=ubuntu-1604        # ubuntu-1404 or centos
+kitchen verify $PLATFORM && kitchen destroy $PLATFORM
 ```
 
 
