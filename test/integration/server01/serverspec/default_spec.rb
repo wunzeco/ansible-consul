@@ -22,7 +22,7 @@ end
   end
 end
 
-%W( 
+%W(
   #{consul_home}/data
   #{consul_home}/logs
   #{consul_home}/scripts
@@ -34,7 +34,7 @@ end
   end
 end
 
-%W( 
+%W(
   #{consul_bin_dir}
   #{consul_conf_dir}
   #{consul_conf_dir}/server
@@ -70,18 +70,16 @@ consul_scripts.each do |f|
   end
 end
 
-if os[:family] =~ /ubuntu|debian/
-  describe file('/etc/init/consul.conf') do
-    it { should be_file }
-    it { should be_mode 644 }
-  end
+service_startup_file = '/lib/systemd/system/consul.service'
+if os[:family] =~ /ubuntu|debian/ and os[:release] == '14.04'
+    service_startup_file = '/etc/init/consul.conf'
+elsif os[:family] =~ /centos|redhat/
+  service_startup_file = '/usr/lib/systemd/system/consul.service'
 end
 
-if os[:family] =~ /centos|redhat/
-  describe file('/usr/lib/systemd/system/consul.service') do
-    it { should be_file }
-    it { should be_mode 644 }
-  end
+describe file(service_startup_file) do
+  it { should be_file }
+  it { should be_mode 644 }
 end
 
 describe service('consul') do

@@ -1,10 +1,12 @@
 ---
 
+- include_vars: "{{ ansible_os_family|lower }}.yml"
+
 - name: Create consul group
   user: name={{ consul_group }} state=present
 
 - name: Create consul user
-  user: 
+  user:
     name:   "{{ consul_user }}"
     group:  "{{ consul_group }}"
     shell:  /bin/bash
@@ -33,7 +35,7 @@
     group: "{{ consul_group }}"
     mode:  0755
     state: directory
-  with_items: 
+  with_items:
     - "{{ consul_home }}"
     - "{{ consul_data_dir }}"
     - "{{ consul_logs_dir }}"
@@ -54,7 +56,7 @@
     group: root
     mode:  0755
     state: directory
-  with_items: 
+  with_items:
     - "{{ consul_conf_dir }}"
     - "{{ consul_conf_dir }}/server"
     - "{{ consul_conf_dir }}/client"
@@ -62,12 +64,13 @@
 - name: Get consul package checksum file
   get_url:
     url:  "{{ consul_checksum_file_url }}"
-    dest: "{{ consul_home }}"
+    dest: "{{ consul_home }}/{{ consul_checksum_file }}"
 
 - name: Get checksum of consul package
   shell: >
       grep {{ consul_pkg }} {{ consul_home }}/{{ consul_checksum_file }}
   register: chksum
+  changed_when: false
 
 - name: Download consul package
   get_url:
@@ -77,10 +80,10 @@
   register: pkg
 
 - name: Check consul binary exists
-  stat: 
+  stat:
     path: "{{ consul_bin_dir }}/consul"
   register: bin
-  
+
 - name: Install consul
   unarchive:
     src:  "{{ consul_home }}/{{ consul_pkg }}"
@@ -90,7 +93,7 @@
   notify: Restart consul
 
 - name: Create consul server config file
-  template: 
+  template:
     src:   server_config.json.j2
     dest:  "{{ consul_conf_dir }}/server/config.json"
     owner: root
@@ -100,7 +103,7 @@
   notify: Restart consul
 
 - name: Create consul client config file
-  template: 
+  template:
     src:   client_config.json.j2
     dest:  "{{ consul_conf_dir }}/client/config.json"
     owner: root
@@ -127,21 +130,25 @@
     dest: /etc/init/consul.conf
     mode: 0644
   notify: Restart consul
-  when: ansible_os_family|lower == 'debian'
+  when: ansible_service_mgr == 'upstart'
 
 - name: Create consul systemd service script
   template:
     src:  consul.service.j2
-    dest: /usr/lib/systemd/system/consul.service
+    dest: "{{ consul_systemd_units_dir }}/consul.service"
     mode: 0644
   notify: Restart consul
-  when: ansible_os_family|lower == 'redhat'
+  when: ansible_service_mgr == 'systemd'
 
 #- name: Create redeploy_service script
 #  template: src=redeploy_service.sh.j2 dest={{ consul_scripts_dir }}/redeploy_service.sh mode=0755
 
 - name: Start consul
-  service: name=consul pattern={{ consul_bin_dir }}/consul enabled=yes state=started 
+  service:
+    name: consul
+    pattern: "{{ consul_bin_dir }}/consul"
+    enabled: yes
+    state: started
 
 - include: web_ui.yml
   when: (consul_install_web_ui or consul_node_type == 'client') and not consul_version|version_compare('0.9.0', '>=')
