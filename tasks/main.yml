@@ -137,8 +137,10 @@
     src:  consul.service.j2
     dest: "{{ consul_systemd_units_dir }}/consul.service"
     mode: 0644
-  notify: Restart consul
   when: ansible_service_mgr == 'systemd'
+  notify:
+    - Reload systemd
+    - Restart consul
 
 #- name: Create redeploy_service script
 #  template: src=redeploy_service.sh.j2 dest={{ consul_scripts_dir }}/redeploy_service.sh mode=0755
